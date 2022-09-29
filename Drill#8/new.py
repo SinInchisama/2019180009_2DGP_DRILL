@@ -21,13 +21,10 @@ def keydowncheck(event):
 
 def keyupcheck(event):
     global movex, movey
-    global framey
     if event.key == SDLK_LEFT:
         movex += 1
-        framey = 2
     elif event.key == SDLK_RIGHT:
         movex -= 1
-        framey = 3
     elif event.key == SDLK_UP:
         movey -= 1
     elif event.key == SDLK_DOWN:
@@ -65,7 +62,7 @@ character = load_image('animation_sheet.png')
 
 running = True
 x, y,movex,movey = TUK_WIDTH // 2, 30,0,0
-framex,framey = 0,3
+framex,framey = 0,1
 
 while running:
     clear_canvas()

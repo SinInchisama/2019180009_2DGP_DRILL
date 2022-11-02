@@ -32,7 +32,7 @@ def handle_events():
                 case pico2d.SDLK_w:
                     if play_state.boy_count > 1:
                         play_state.boy_count -= 1
-                case 61:
+                case pico2d.SDLK_PLUS:
                     if play_state.boy_count < 10:
                         play_state.boy_count += 1
                 case 45:

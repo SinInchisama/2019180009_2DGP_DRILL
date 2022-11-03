@@ -1,17 +1,22 @@
 from pico2d import *
-from boy import Boy
-from grass import Grass
 import game_framework
+from Ball import Ball
+import game_world
+from grass import Grass
+from boy import Boy
+
 
 boy = None
 grass = None
+balls = None
+ball1 = None
 
 def handle_events():
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
             game_framework.quit()
-        elif (event.type,event.key) == (SDL_KEYDOWN,SDLK_ESCAPE):
+        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
             game_framework.quit()
         else:
             boy.handle_event(event)
@@ -19,23 +24,34 @@ def handle_events():
 
 # 초기화
 def enter():
-    global boy, grass
+    global boy, grass,balls
     boy = Boy()
+    game_world.add_Object(boy,1)
     grass = Grass()
+    game_world.add_Object(grass,0)
+    grass = Grass(400,20)
+    game_world.add_Object(grass, 1)
+    # balls = [Ball()]
 
 # 종료
 def exit():
-    global boy, grass
-    del boy
-    del grass
+    game_world.clear()
 
 def update():
-    boy.update()
+    for Object in game_world.all_objects():
+        Object.update()
+
+    # boy.update()
+    # for ball in balls:
+    #     ball.update()
 
 def draw_world():
-    grass.draw()
-    boy.draw()
-
+    for Object in game_world.all_objects():
+        Object.draw()
+    # grass.draw()
+    # boy.draw()
+    # for ball in balls:
+    #     ball.draw()
 
 def draw():
     clear_canvas()

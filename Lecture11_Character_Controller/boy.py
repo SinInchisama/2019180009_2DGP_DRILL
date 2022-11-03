@@ -87,7 +87,7 @@ class SLEEP:
         if self.face_dir == 1:
             self.image.clip_composite_draw(self.frame * 100, 300, 100, 100,3.141592/2,'', self.x -25, self.y - 25,100,100)
         else:
-            self.image.clip_composite_draw(self.frame * 100, 300, 100, 100,3.141592/2,'', self.x + 25, self.y - 25,100,100)
+            self.image.clip_composite_draw(self.frame * 100, 300, 100, 100,3.141592/2,'v', self.x + 25, self.y - 25,100,100)
         pass
 class RUN:
     @staticmethod
@@ -124,19 +124,53 @@ class RUN:
             self.image.clip_draw(self.frame * 100, 100, 100, 100, self.x, self.y)
         pass
 
+class AUTO_RUN:
+    @staticmethod
+    def enter(self,event):
+        print('Enter AUTO Run')
+        self.dir = self.face_dir
 
-RD, LD, RU, LU,TIMER = range(5)
+
+    @staticmethod
+    def exit(self):
+        print('Exit AUTO Run')
+        self.face_dir = self.dir # run을 나가서, Idle로 갈때 얼굴 방향을 알려줄 필요가 있다.
+        self.dir = 0
+        pass
+
+    @staticmethod
+    def do(self):
+        self.frame = (self.frame + 1) % 8
+        self.x += self.dir
+        if(self.x >= 750):
+            self.dir = -1
+        elif(self.x<= 50):
+            self.dir = 1
+        pass
+
+    @staticmethod
+    def draw(self):
+        if self.dir == -1:
+            self.image.clip_draw(self.frame * 100, 0, 100, 100, self.x, self.y+40,200,200)
+        elif self.dir == 1:
+            self.image.clip_draw(self.frame * 100, 100, 100, 100, self.x, self.y+40,200,200)
+        pass
+
+
+RD, LD, RU, LU,TIMER,AD = range(6)
 
 key_event_table = {
     (SDL_KEYDOWN,SDLK_RIGHT) : RD,
     (SDL_KEYDOWN,SDLK_LEFT) : LD,
     (SDL_KEYUP,SDLK_RIGHT) : RU,
-    (SDL_KEYUP,SDLK_LEFT) : LU
+    (SDL_KEYUP,SDLK_LEFT) : LU,
+    (SDL_KEYDOWN,SDLK_a) : AD
 }
 
 next_state = {
-    SLEEP : {RD:RUN,LD:RUN,RU: RUN,LU:RUN,SLEEP : SLEEP},
-    IDLE: {RU:RUN,LU:RUN,RD:RUN,LD:RUN,TIMER : SLEEP},
-    RUN : {RU:IDLE,LU:IDLE,RD:IDLE,LD:IDLE}
+    SLEEP : {RD:RUN,LD:RUN,RU: RUN,LU:RUN,SLEEP : SLEEP,AD:SLEEP},
+    IDLE: {RU:RUN,LU:RUN,RD:RUN,LD:RUN,TIMER : SLEEP,AD:AUTO_RUN},
+    RUN : {RU:IDLE,LU:IDLE,RD:IDLE,LD:IDLE,AD:AUTO_RUN},
+    AUTO_RUN:{RU:RUN,LU:RUN,RD:RUN,LD:RUN,AD : IDLE}
 }
 

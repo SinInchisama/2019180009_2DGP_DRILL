@@ -107,6 +107,7 @@ class RUN:
     def exit(self):
         print('Exit Run')
         self.face_dir = self.dir # run을 나가서, Idle로 갈때 얼굴 방향을 알려줄 필요가 있다.
+        self.dir = 0
         pass
 
     @staticmethod

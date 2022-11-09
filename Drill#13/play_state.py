@@ -3,9 +3,10 @@ import game_framework
 import game_world
 from grass import Grass
 from Bird import bird
+from boy import Boy
 
 
-
+boy = None
 Bird = None
 grass = None
 
@@ -16,16 +17,20 @@ def handle_events():
             game_framework.quit()
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
             game_framework.quit()
+        else:
+            boy.handle_event(event)
 
 
 # 초기화
 def enter():
-    global Bird, grass
+    global Bird, grass,boy
+    boy = Boy()
     grass = Grass()
     Bird = [bird() for i in range(0,10)]
     game_world.add_object(grass, 0)
     for i in Bird:
         game_world.add_object(i, 1)
+    game_world.add_object(boy, 1)
 
 
 # 종료
